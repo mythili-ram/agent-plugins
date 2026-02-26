@@ -108,7 +108,7 @@ Repository reviewers, maintainers, and admins can find PR review workflows, merg
 
 ## Administrators
 
-AWS account setup, IAM OIDC federation, CodeBuild integration, and GitHub environment configuration are documented in the [administrators guide](./docs/ADMINISTRATORS_GUIDE.md).
+GitHub environment and AWS account configuration are documented in the [administrators guide](./docs/ADMINISTRATORS_GUIDE.md).
 
 ## Additional Resources
 
