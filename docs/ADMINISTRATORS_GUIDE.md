@@ -31,7 +31,7 @@ GitHub-hosted runner (ubuntu-latest)
 
 ### Prerequisites
 
-Complete these steps in order. Steps 1-3 are AWS-side, steps 4-5 are GitHub-side.
+Complete these steps in order.
 
 #### 1. Create the IAM OIDC identity provider
 
@@ -46,16 +46,48 @@ aws iam create-open-id-connect-provider \
 
 > The thumbprint is a formality — AWS validates via the OIDC discovery document. GitHub rotates certificates independently.
 
-#### 2. Create the CodeBuild project
+#### 2. Create a GitHub Personal Access Token and import source credentials
 
-> **Prerequisite:** GitHub credentials must already be connected to CodeBuild in this account. If not, import them first:
->
-> ```bash
-> aws codebuild import-source-credentials \
->   --server-type GITHUB \
->   --auth-type PERSONAL_ACCESS_TOKEN \
->   --token <GITHUB_PAT>
-> ```
+CodeBuild needs a GitHub Personal Access Token (PAT) to clone the repository source. A **fine-grained token** is recommended over a classic token because it supports least-privilege permissions and can be scoped to a single repository.
+
+> **PAT creation is not scriptable.** GitHub does not expose a REST API or CLI endpoint to create tokens. You must use the GitHub web UI.
+
+**Create the fine-grained token:**
+
+1. Go to **github.com > Settings > Developer settings > Personal access tokens > Fine-grained tokens**
+2. Click **Generate new token**
+3. Configure the token:
+   - **Token name**: `codebuild-agent-plugins` (or similar)
+   - **Expiration**: choose an appropriate lifetime (default 30 days, max 1 year)
+   - **Resource owner**: select the organization that owns the repository (e.g., `awslabs`)
+   - **Repository access**: select **Only select repositories** and choose `awslabs/agent-plugins`
+   - **Permissions > Repository permissions**:
+     - **Contents**: Read-only
+   - All other permissions can remain at **No access**
+4. Click **Generate token** and copy the value immediately — it will not be shown again
+
+> A classic token would require the `repo` scope, which grants full read/write access to all private repositories — far broader than what CodeBuild needs for this workflow.
+
+**Import the token into CodeBuild:**
+
+```bash
+aws codebuild import-source-credentials \
+  --server-type GITHUB \
+  --auth-type PERSONAL_ACCESS_TOKEN \
+  --token <GITHUB_PAT>
+```
+
+**Verify the import:**
+
+```bash
+aws codebuild list-source-credentials
+```
+
+You should see an entry with `serverType: GITHUB` and `authType: PERSONAL_ACCESS_TOKEN`.
+
+#### 3. Create the CodeBuild project
+
+> **Prerequisite:** complete step 2 to import GitHub credentials before creating the project.
 
 Deploy the CloudFormation stack below. It creates:
 
@@ -221,7 +253,7 @@ Outputs:
   ArtifactBucketName:
     Description: >-
       S3 bucket for build artifacts (SARIF reports). Pass this as the
-      ArtifactBucketName parameter when deploying the IAM role stack in step 3.
+      ArtifactBucketName parameter when deploying the IAM role stack in step 4.
     Value: !Ref ArtifactBucket
 
   ServiceRoleArn:
@@ -238,14 +270,14 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
-After deployment, note the `ProjectName` and `ArtifactBucketName` outputs — you will need them in steps 3 and 5.
+After deployment, note the `ProjectName` and `ArtifactBucketName` outputs — you will need them in steps 4 and 6.
 
-#### 3. Create the IAM role and policy
+#### 4. Create the IAM role and policy
 
 Deploy the CloudFormation stack below. It creates a single IAM role with:
 
 - An OIDC trust policy scoped to `repo:awslabs/agent-plugins:environment:codebuild`
-- Least-privilege permissions: `codebuild:StartBuild`, `codebuild:BatchGetBuilds`, `logs:GetLogEvents`, and `s3:GetObject` on the artifact bucket from step 2
+- Least-privilege permissions: `codebuild:StartBuild`, `codebuild:BatchGetBuilds`, `logs:GetLogEvents`, and `s3:GetObject` on the artifact bucket from step 3
 
 **CloudFormation template:**
 
@@ -276,13 +308,13 @@ Parameters:
   CodeBuildProjectName:
     Type: String
     Default: agent-plugins-build
-    Description: Name of the CodeBuild project (from step 2 ProjectName output).
+    Description: Name of the CodeBuild project (from step 3 ProjectName output).
 
   ArtifactBucketName:
     Type: String
     Default: ''
     Description: >-
-      Name of the S3 bucket for build artifacts (from step 2
+      Name of the S3 bucket for build artifacts (from step 3
       ArtifactBucketName output). If provided, the role gets s3:GetObject
       to download SARIF reports.
 
@@ -399,7 +431,7 @@ Outputs:
     Value: !Ref GitHubOIDCProvider
 ```
 
-**Deploy with the artifact bucket from step 2:**
+**Deploy with the artifact bucket from step 3:**
 
 ```bash
 aws cloudformation deploy \
@@ -423,9 +455,9 @@ aws cloudformation deploy \
     ArtifactBucketName=agent-plugins-build-artifacts-123456789012
 ```
 
-After deployment, note the `RoleArn` output — you will need it in step 5.
+After deployment, note the `RoleArn` output — you will need it in step 6.
 
-#### 4. Create the GitHub environment
+#### 5. Create the GitHub environment
 
 **Using the GitHub CLI:**
 
@@ -455,20 +487,20 @@ EOF
 
 The non-self-approval requirement ensures that the person who triggers the workflow cannot approve their own run.
 
-#### 5. Configure GitHub secrets and variables
+#### 6. Configure GitHub secrets and variables
 
 In **Settings > Environments > codebuild**:
 
 | Type   | Name                     | Value                                                       |
 | ------ | ------------------------ | ----------------------------------------------------------- |
-| Secret | `AWS_CODEBUILD_ROLE_ARN` | The `RoleArn` output from the CloudFormation stack (step 3) |
+| Secret | `AWS_CODEBUILD_ROLE_ARN` | The `RoleArn` output from the CloudFormation stack (step 4) |
 
 In **Settings > Secrets and variables > Actions > Variables**:
 
 | Type     | Name                     | Value                                                            |
 | -------- | ------------------------ | ---------------------------------------------------------------- |
 | Variable | `AWS_REGION`             | AWS region where the CodeBuild project lives (e.g., `us-east-1`) |
-| Variable | `CODEBUILD_PROJECT_NAME` | The `ProjectName` output from the CloudFormation stack (step 2)  |
+| Variable | `CODEBUILD_PROJECT_NAME` | The `ProjectName` output from the CloudFormation stack (step 3)  |
 
 `AWS_CODEBUILD_ROLE_ARN` is scoped to the `codebuild` environment so it is only available to jobs that have passed the approval gate. `AWS_REGION` and `CODEBUILD_PROJECT_NAME` are not sensitive and are stored as repo-level variables.
 
