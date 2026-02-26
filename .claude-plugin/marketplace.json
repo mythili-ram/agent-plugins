@@ -47,6 +47,28 @@
       "source": "./plugins/amazon-location-service",
       "tags": ["aws", "location", "maps", "geospatial"],
       "version": "1.0.0"
+    },
+    {
+      "category": "observability",
+      "description": "Comprehensive AWS observability platform combining CloudWatch Logs, Metrics, Alarms, Application Signals (APM), CloudTrail security auditing, and automated codebase observability gap analysis.",
+      "keywords": [
+        "aws",
+        "observability",
+        "cloudwatch",
+        "monitoring",
+        "logs",
+        "metrics",
+        "alarms",
+        "application-signals",
+        "apm",
+        "cloudtrail",
+        "security",
+        "tracing"
+      ],
+      "name": "aws-observability",
+      "source": "./plugins/aws-observability",
+      "tags": ["aws", "observability", "monitoring", "cloudwatch"],
+      "version": "1.0.0"
     }
   ]
 }

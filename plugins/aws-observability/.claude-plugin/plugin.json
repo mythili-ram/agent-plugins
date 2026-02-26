@@ -1,0 +1,25 @@
+{
+  "author": {
+    "name": "Amazon Web Services"
+  },
+  "description": "Comprehensive AWS observability platform combining CloudWatch Logs, Metrics, Alarms, Application Signals (APM), CloudTrail security auditing, and automated codebase observability gap analysis for complete monitoring, troubleshooting, and optimization.",
+  "homepage": "https://github.com/awslabs/agent-plugins",
+  "keywords": [
+    "aws",
+    "observability",
+    "cloudwatch",
+    "monitoring",
+    "logs",
+    "metrics",
+    "alarms",
+    "application-signals",
+    "apm",
+    "cloudtrail",
+    "security",
+    "tracing"
+  ],
+  "license": "Apache-2.0",
+  "name": "aws-observability",
+  "repository": "https://github.com/awslabs/agent-plugins",
+  "version": "1.0.0"
+}
