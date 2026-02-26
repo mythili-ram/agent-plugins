@@ -270,7 +270,29 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
-After deployment, note the `ProjectName` and `ArtifactBucketName` outputs — you will need them in steps 4 and 6.
+**Deploy with custom parameters:**
+
+```bash
+aws cloudformation deploy \
+  --template-file administrators-guide-codebuild-project.yaml \
+  --stack-name agent-plugins-codebuild \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides \
+    ProjectName=my-codebuild-project \
+    GitHubRepoUrl=https://github.com/my-org/my-repo \
+    ComputeType=BUILD_GENERAL1_MEDIUM \
+    Image=aws/codebuild/amazonlinux-x86_64-standard:5.0 \
+    LogRetentionDays=30
+```
+
+After deployment, retrieve the `ProjectName` and `ArtifactBucketName` outputs — you will need them in steps 4 and 6:
+
+```bash
+aws cloudformation describe-stacks \
+  --stack-name agent-plugins-codebuild \
+  --query "Stacks[0].Outputs[?OutputKey=='ProjectName' || OutputKey=='ArtifactBucketName'].[OutputKey,OutputValue]" \
+  --output table
+```
 
 #### 4. Create the IAM role and policy
 
@@ -488,6 +510,20 @@ EOF
 The non-self-approval requirement ensures that the person who triggers the workflow cannot approve their own run.
 
 #### 6. Configure GitHub secrets and variables
+
+**Using the GitHub CLI:**
+
+```bash
+# Environment secret (scoped to the codebuild environment)
+gh secret set AWS_CODEBUILD_ROLE_ARN --env codebuild \
+  --body "<RoleArn output from step 4>"
+
+# Repo-level variables (not sensitive)
+gh variable set AWS_REGION --body "us-east-1"
+gh variable set CODEBUILD_PROJECT_NAME --body "<ProjectName output from step 3>"
+```
+
+**Using the GitHub UI:**
 
 In **Settings > Environments > codebuild**:
 
