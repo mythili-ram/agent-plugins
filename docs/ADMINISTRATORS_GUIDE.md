@@ -140,7 +140,17 @@ Parameters:
 
 Resources:
   ArtifactBucket:
+    # checkov:skip=CKV_AWS_18:Access logging disproportionate for temporary CI artifacts with lifecycle expiration
+    # checkov:skip=CKV_AWS_21:Versioning unnecessary for ephemeral build artifacts with lifecycle expiration
     Type: AWS::S3::Bucket
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W35
+            reason: >-
+              Access logging is unnecessary for a CI artifact bucket with
+              lifecycle expiration. It would require a separate logging
+              bucket, disproportionate for temporary SARIF reports.
     Properties:
       BucketName: !Sub '${ProjectName}-artifacts-${AWS::AccountId}'
       LifecycleConfiguration:
@@ -158,14 +168,54 @@ Resources:
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
 
+  ArtifactBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ArtifactBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyNonSSLAccess
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource:
+              - !GetAtt ArtifactBucket.Arn
+              - !Sub '${ArtifactBucket.Arn}/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+
   LogGroup:
+    # checkov:skip=CKV_AWS_158:CloudWatch Logs encrypted by AWS-managed keys by default; CMK adds unnecessary cost for CI logs
     Type: AWS::Logs::LogGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W84
+            reason: >-
+              CloudWatch Logs are encrypted at rest with AWS-managed keys
+              by default. A customer-managed KMS key adds cost and
+              operational overhead with no benefit for CI build logs.
     Properties:
       LogGroupName: !Sub '/aws/codebuild/${ProjectName}'
       RetentionInDays: !Ref LogRetentionDays
 
   ServiceRole:
     Type: AWS::IAM::Role
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W11
+            reason: >-
+              The KMS Resource: '*' is scoped by kms:ViaService condition
+              to S3 only. The AWS-managed KMS key ARN cannot be predicted
+              at deploy time, so a wildcard is the standard pattern.
+          - id: W28
+            reason: >-
+              Explicit naming (${ProjectName}-service-role) is intentional
+              for discoverability and cross-stack references. The role is
+              not expected to require replacement.
     Properties:
       RoleName: !Sub '${ProjectName}-service-role'
       Description: !Sub 'Service role for CodeBuild project ${ProjectName}.'
@@ -213,11 +263,20 @@ Resources:
 
   Project:
     Type: AWS::CodeBuild::Project
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W32
+            reason: >-
+              Artifacts use EncryptionDisabled: false, which encrypts with
+              the AWS-managed key. A customer-managed KMS key adds cost
+              and complexity with no benefit for CI build artifacts.
     Properties:
       Name: !Ref ProjectName
       Description: >-
         Runs the agent-plugins build. Invoked by the Build (CodeBuild)
         GitHub Actions workflow via aws-codebuild-run-build.
+      BadgeEnabled: true
       ServiceRole: !GetAtt ServiceRole.Arn
       Source:
         Type: GITHUB
@@ -233,6 +292,7 @@ Resources:
         Type: LINUX_CONTAINER
         ComputeType: !Ref ComputeType
         Image: !Ref Image
+        PrivilegedMode: false # Enable only if the build needs to run Docker commands
       LogsConfig:
         CloudWatchLogs:
           Status: ENABLED
