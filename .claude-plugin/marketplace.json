@@ -47,6 +47,24 @@
       "source": "./plugins/amazon-location-service",
       "tags": ["aws", "location", "maps", "geospatial"],
       "version": "1.0.0"
+    },
+    {
+      "category": "discovery",
+      "description": "Dynamically discover, recommend, and load plugins from the marketplace based on user intent. Routes requests to the right plugin automatically.",
+      "keywords": [
+        "plugin",
+        "discovery",
+        "loader",
+        "marketplace",
+        "routing",
+        "install",
+        "catalog",
+        "recommend"
+      ],
+      "name": "agent-loading",
+      "source": "./plugins/agent-loading",
+      "tags": ["aws", "plugin", "discovery", "marketplace"],
+      "version": "0.1.0"
     }
   ]
 }

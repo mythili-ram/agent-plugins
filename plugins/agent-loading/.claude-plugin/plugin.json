@@ -1,0 +1,21 @@
+{
+  "author": {
+    "name": "Amazon Web Services"
+  },
+  "description": "Dynamically discover, recommend, and load plugins from the marketplace based on user intent. Routes requests to the right plugin automatically.",
+  "homepage": "https://github.com/awslabs/agent-plugins",
+  "keywords": [
+    "aws",
+    "plugin",
+    "marketplace",
+    "discovery",
+    "loader",
+    "routing",
+    "install",
+    "catalog"
+  ],
+  "license": "Apache-2.0",
+  "name": "agent-loading",
+  "repository": "https://github.com/awslabs/agent-plugins",
+  "version": "0.1.0"
+}
