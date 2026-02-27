@@ -3,6 +3,7 @@
     "allow": []
   },
   "attribution": {
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
     "pr": "🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\n---\n\nBy submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of the [project license](https://github.com/awslabs/agent-plugins/blob/main/LICENSE)."
   },
   "enabledPlugins": {
