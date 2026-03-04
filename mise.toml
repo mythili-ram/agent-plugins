@@ -83,9 +83,13 @@ run = [
 
 [tasks."security:checkov"]
 description = "Run Checkov"
-run = [
-  "checkov --quiet --directory . "
-]
+run = '''
+log_level=$(echo "$LOG_LEVEL" | tr '[:upper:]' '[:lower:]')
+if [ "$log_level" = "trace" ]; then
+  export LOG_LEVEL=DEBUG
+fi
+checkov --quiet --directory .
+'''
 
 [tasks."security:gitleaks"]
 description = "Run GitLeaks"
