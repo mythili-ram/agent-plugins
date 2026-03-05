@@ -33,6 +33,17 @@
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
     },
+    "awslabs.billing-cost-management-mcp-server": {
+      "command": "uvx",
+      "args": [
+        "awslabs.billing-cost-management-mcp-server@latest"
+      ],
+      "env": {
+        "AWS_PROFILE": "default",
+        "AWS_REGION": "us-east-1",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
     "awsknowledge": {
       "type": "http",
       "url": "https://knowledge-mcp.global.api.aws"

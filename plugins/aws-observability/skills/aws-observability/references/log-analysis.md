@@ -163,6 +163,7 @@ filter @type = "REPORT"
 | parse @message /Init Duration: (?<initDuration>[\d\.]+)/
 | filter ispresent(initDuration)
 | stats count(*) as coldStarts, avg(initDuration) as avgInitMs by bin(1h)
+| limit 100
 ```
 
 ### Pattern 4: API Latency Analysis
@@ -175,6 +176,7 @@ filter ispresent(duration)
         max(duration) as maxMs
   by bin(5m)
 | sort @timestamp desc
+| limit 100
 ```
 
 ### Pattern 5: HTTP Status Code Distribution
@@ -183,6 +185,7 @@ filter ispresent(duration)
 filter ispresent(statusCode)
 | stats count(*) as requests by statusCode
 | sort statusCode asc
+| limit 100
 ```
 
 ### Pattern 6: Find Slow Requests
@@ -217,6 +220,7 @@ filter @message like /ERROR/
 filter @requestId = "abc-123-def"
 | fields @timestamp, @message, @logStream
 | sort @timestamp asc
+| limit 100
 ```
 
 ### Pattern 10: Anomaly Detection

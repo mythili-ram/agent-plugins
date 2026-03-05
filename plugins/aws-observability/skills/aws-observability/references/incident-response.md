@@ -58,7 +58,7 @@ This reference provides comprehensive guidance for responding to incidents and t
    fields @timestamp, @logStream, @message, level, errorType, requestId
    | filter level = "ERROR"
    | sort @timestamp asc
-   | limit 1000
+   | limit 100
    ```
 
 2. **Application Signals Traces**
@@ -340,7 +340,7 @@ For detailed log query patterns and syntax, see `log-analysis.md`. Key incident-
 - Check CloudWatch Metrics for resource utilization
 - Query logs for timeout errors
 - Review Application Signals for latency increases
-- Check Cost Explorer for usage spikes
+- Check Billing & Cost Management for usage spikes
 
 **Mitigation**: Scale resources, optimize code
 
@@ -418,7 +418,7 @@ For detailed log query patterns (including duration parsing and aggregation), se
 - Check CloudWatch Metrics for request rates
 - Query logs for request patterns
 - Review Application Signals for traffic sources
-- Check Cost Explorer for usage spikes
+- Check Billing & Cost Management for usage spikes
 
 **Mitigation**:
 
@@ -453,7 +453,7 @@ For detailed patterns on individual tools, see the specialized guides: `log-anal
    |
 6. Change Detection (CloudTrail)
    |
-7. Cost Impact (Cost Explorer)
+7. Cost Impact (Billing & Cost Management MCP server)
    |
 8. Documentation (AWS Documentation)
 ```

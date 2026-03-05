@@ -21,10 +21,11 @@ Comprehensive AWS observability platform combining monitoring, troubleshooting, 
    - `synthetics:GetCanary`, `synthetics:GetCanaryRuns` for canary analysis
    - `s3:GetObject`, `s3:ListBucket` for canary artifacts
    - `iam:GetRole`, `iam:ListAttachedRolePolicies`, `iam:GetPolicy`, `iam:GetPolicyVersion` for enablement guides
+   - **Billing & Cost Management**: `ce:*`, `cost-optimization-hub:*`, `compute-optimizer:*`, `budgets:ViewBudget`, `pricing:*`, `freetier:GetFreeTierUsage`, `bcm-pricing-calculator:*`, `billingconductor:*`
 
 ## Configuration
 
-After installing this plugin, update the MCP server configuration with your AWS profile and region. Find the `awslabs.cloudwatch-mcp-server` entry and update the `env` section:
+After installing this plugin, update the MCP server configuration with your AWS profile and region. Update the `env` section for each AWS-backed stdio server (`awslabs.cloudwatch-mcp-server`, `awslabs.cloudwatch-applicationsignals-mcp-server`, `awslabs.cloudtrail-mcp-server`, `awslabs.billing-cost-management-mcp-server`):
 
 ```json
 "env": {
@@ -59,6 +60,10 @@ Security auditing and compliance tracking through CloudTrail Lake (SQL), CloudWa
 ### Codebase Observability Analysis
 
 Automated analysis of codebases to identify observability gaps across Python, Java, JavaScript/TypeScript, Go, Ruby, and C#/.NET. Covers logging patterns, metrics instrumentation, tracing coverage, error handling, and health checks.
+
+### Billing & Cost Management
+
+AWS cost analysis, forecasting, and optimization. Query cost and usage data, detect anomalies, get Compute Optimizer right-sizing recommendations, monitor budgets, track Reserved Instance and Savings Plans performance, and analyze S3 Storage Lens metrics.
 
 ### AWS Documentation Access
 
@@ -149,12 +154,13 @@ by bin(5m) as timeWindow
 
 ## MCP Servers
 
-| Server                                             | Type  | Purpose                                              |
-| -------------------------------------------------- | ----- | ---------------------------------------------------- |
-| `awslabs.cloudwatch-mcp-server`                    | stdio | CloudWatch Logs, Metrics, Alarms, log group analysis |
-| `awslabs.cloudwatch-applicationsignals-mcp-server` | stdio | Application Signals APM, SLOs, distributed tracing   |
-| `awslabs.cloudtrail-mcp-server`                    | stdio | CloudTrail security auditing, API activity tracking  |
-| `awsknowledge`                                     | HTTP  | AWS documentation, architecture guidance             |
+| Server                                             | Type  | Purpose                                                     |
+| -------------------------------------------------- | ----- | ----------------------------------------------------------- |
+| `awslabs.cloudwatch-mcp-server`                    | stdio | CloudWatch Logs, Metrics, Alarms, log group analysis        |
+| `awslabs.cloudwatch-applicationsignals-mcp-server` | stdio | Application Signals APM, SLOs, distributed tracing          |
+| `awslabs.cloudtrail-mcp-server`                    | stdio | CloudTrail security auditing, API activity tracking         |
+| `awslabs.billing-cost-management-mcp-server`       | stdio | Cost Explorer, Compute Optimizer, Budgets, Billing analysis |
+| `awsknowledge`                                     | HTTP  | AWS documentation, architecture guidance                    |
 
 ## Best Practices
 
