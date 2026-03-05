@@ -149,12 +149,12 @@ by bin(5m) as timeWindow
 
 ## MCP Servers
 
-| Server                                             | Purpose                                              |
-| -------------------------------------------------- | ---------------------------------------------------- |
-| `awslabs.cloudwatch-mcp-server`                    | CloudWatch Logs, Metrics, Alarms, log group analysis |
-| `awslabs.cloudwatch-applicationsignals-mcp-server` | Application Signals APM, SLOs, distributed tracing   |
-| `awslabs.cloudtrail-mcp-server`                    | CloudTrail security auditing, API activity tracking  |
-| `awslabs.aws-documentation-mcp-server`             | Official AWS documentation search and access         |
+| Server                                             | Type  | Purpose                                              |
+| -------------------------------------------------- | ----- | ---------------------------------------------------- |
+| `awslabs.cloudwatch-mcp-server`                    | stdio | CloudWatch Logs, Metrics, Alarms, log group analysis |
+| `awslabs.cloudwatch-applicationsignals-mcp-server` | stdio | Application Signals APM, SLOs, distributed tracing   |
+| `awslabs.cloudtrail-mcp-server`                    | stdio | CloudTrail security auditing, API activity tracking  |
+| `awsknowledge`                                     | HTTP  | AWS documentation, architecture guidance             |
 
 ## Best Practices
 
