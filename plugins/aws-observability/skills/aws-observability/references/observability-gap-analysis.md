@@ -1,8 +1,8 @@
-# Codebase Observability Gap Analysis Steering
+# Codebase Observability Gap Analysis
 
 ## Purpose
 
-This steering file provides guidance for analyzing codebases across major programming languages to identify observability gaps and provide actionable recommendations for instrumentation, logging, metrics, and tracing.
+This reference provides guidance for analyzing codebases across major programming languages to identify observability gaps and provide actionable recommendations for instrumentation, logging, metrics, and tracing.
 
 ## Analysis Framework
 

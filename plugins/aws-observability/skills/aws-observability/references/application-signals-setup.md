@@ -1,6 +1,6 @@
 # Application Signals Setup and Enablement Guide
 
-This steering file provides comprehensive guidance for setting up AWS Application Signals using the plugin's enablement guide feature.
+This reference provides comprehensive guidance for setting up AWS Application Signals using the plugin's enablement guide feature.
 
 ## Quick Start: Get Enablement Guide
 

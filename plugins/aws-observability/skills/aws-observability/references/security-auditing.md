@@ -1,8 +1,8 @@
-# CloudTrail Security Auditing Steering
+# CloudTrail Security Auditing
 
 ## Purpose
 
-This steering file provides guidance for accessing and analyzing CloudTrail audit data for security auditing, compliance monitoring, and governance analysis.
+This reference provides guidance for accessing and analyzing CloudTrail audit data for security auditing, compliance monitoring, and governance analysis.
 
 ## Prerequisites and Data Source Selection
 
@@ -36,7 +36,7 @@ If neither CloudTrail Lake nor CloudWatch Logs available:
 
 **See `cloudtrail-data-source-selection.md` for detailed decision tree and implementation workflow.**
 
-## When to Load This Steering
+## When to Load This Reference
 
 Load this when the user needs to:
 
@@ -194,7 +194,7 @@ lookup_events(
             'AttributeValue': 'DeleteBucket'
         }
     ],
-    StartTime='2024-01-01T00:00:00Z',
+    StartTime='2024-10-01T00:00:00Z',  # Must be within 90 days
     EndTime='2024-12-31T23:59:59Z',
     MaxResults=50
 )
@@ -207,7 +207,7 @@ lookup_events(
 - Basic filtering capabilities
 - No SQL or complex query support
 
-#### Pattern 2: Security Incident Investigation
+#### Security Incident Investigation
 
 ```
 # 1. Identify suspicious activity (failed access attempts)
@@ -230,7 +230,7 @@ fields eventTime, eventName, userIdentity.userName, requestParameters
 | limit 50
 ```
 
-#### Pattern 3: Compliance Audit
+#### Compliance Audit
 
 ```
 # 1. List all IAM changes
@@ -253,7 +253,7 @@ fields eventTime, eventName, userIdentity.userName, requestParameters, responseE
 | limit 100
 ```
 
-#### Pattern 4: Resource Change Tracking
+#### Resource Change Tracking
 
 ```
 # 1. Find specific resource changes (replace with actual resource ARN)

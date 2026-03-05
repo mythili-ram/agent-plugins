@@ -1,8 +1,8 @@
-# Application Signals Performance Monitoring Steering
+# Application Signals Performance Monitoring
 
 ## Purpose
 
-This steering file provides guidance for using AWS CloudWatch Application Signals to monitor application performance, health, and dependencies.
+This reference provides guidance for using AWS CloudWatch Application Signals to monitor application performance, health, and dependencies.
 
 ## Application Signals Overview
 

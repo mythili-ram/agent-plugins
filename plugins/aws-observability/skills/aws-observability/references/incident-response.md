@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This steering file provides comprehensive guidance for responding to incidents and troubleshooting issues using the full AWS observability stack.
+This reference provides comprehensive guidance for responding to incidents and troubleshooting issues using the full AWS observability stack.
 
 ## Incident Response Framework
 

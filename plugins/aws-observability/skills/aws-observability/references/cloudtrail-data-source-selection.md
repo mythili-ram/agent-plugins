@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This is a utility guide referenced by `security-auditing.md` and other steering files for CloudTrail data access priority logic. It is not intended to be loaded directly in response to user queries. For CloudTrail security analysis, use `security-auditing.md` instead.
+This is a utility guide referenced by `security-auditing.md` and other reference files for CloudTrail data access priority logic. It is not intended to be loaded directly in response to user queries. For CloudTrail security analysis, use `security-auditing.md` instead.
 
-This steering file defines the priority order for accessing CloudTrail audit data across different AWS services. It ensures the agent always uses the most efficient and comprehensive data source available.
+This reference defines the priority order for accessing CloudTrail audit data across different AWS services. It ensures the agent always uses the most efficient and comprehensive data source available.
 
 ## Data Source Priority
 
@@ -339,7 +339,7 @@ This priority-based approach ensures:
 - Graceful fallback to available alternatives
 - Clear guidance for users on capabilities
 - Cost optimization through appropriate tool selection
-- Consistent behavior across all steering files
+- Consistent behavior across all reference files
 
 ---
 

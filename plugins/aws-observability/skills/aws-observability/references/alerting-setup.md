@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This steering file provides guidance for setting up effective CloudWatch alarms using recommended configurations and best practices.
+This reference provides guidance for setting up effective CloudWatch alarms using recommended configurations and best practices.
 
 ## Core Concepts
 
@@ -171,18 +171,18 @@ Rationale:
 **Recommended Configuration**:
 
 ```
-Metric: AWS/DynamoDB - UserErrors
+Metric: AWS/DynamoDB - ReadThrottleEvents / WriteThrottleEvents
 Statistic: Sum
-Threshold: > 10 errors
+Threshold: > 10 throttle events
 Evaluation Period: 1 minute
 Datapoints to Alarm: 2 out of 2
 Treat Missing Data: notBreaching
 
 Rationale:
-- Sum is correct for error counts
-- 10 errors indicates capacity issue
+- Sum is correct for throttle event counts
+- 10 throttle events indicates a capacity or hot-partition issue
 - 1-minute periods for quick detection
-- 2 out of 2 confirms sustained throttling
+- 2 out of 2 confirms sustained throttling, not a single spike
 ```
 
 ## Composite Alarms
