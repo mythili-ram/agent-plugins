@@ -42,8 +42,8 @@ Requires AWS CLI credentials. All stdio MCP servers use `AWS_PROFILE` and `AWS_R
 **User setting up Application Signals for the first time?**
 -> Load [Application Signals Setup](references/application-signals-setup.md). Start with `get_enablement_guide`.
 
-**CloudTrail data source priority reference** (loaded by security-auditing.md, not directly):
--> [CloudTrail Data Source Selection](references/cloudtrail-data-source-selection.md)
+**Need prerequisites or configuration help?**
+-> Load [Prerequisites and Configuration](references/prerequisites.md) for IAM permissions, MCP server setup, and AWS credential configuration.
 
 ## Essential Log Query Patterns
 

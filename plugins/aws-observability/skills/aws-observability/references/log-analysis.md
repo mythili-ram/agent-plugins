@@ -226,7 +226,8 @@ filter @requestId = "abc-123-def"
 ### Pattern 10: Anomaly Detection
 
 ```
-anomaly @message
+pattern @message
+| anomaly
 | limit 50
 ```
 
