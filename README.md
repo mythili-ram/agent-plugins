@@ -116,8 +116,7 @@ Replace `deploy-on-aws` with any plugin name from the table above (e.g., `aws-se
 
 > [!TIP]
 > If a skill isn't activated automatically, you can explicitly invoke it by saying "Use the deploy skill to ..." in your prompt. Kiro's intent matching may not always auto-trigger skills.
-
-> [!TIP]
+>
 > If `bunx` fails with a "Cannot find package" error, clear the bun cache and retry:
 >
 > ```bash
